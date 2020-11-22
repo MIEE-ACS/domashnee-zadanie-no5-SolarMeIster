@@ -51,10 +51,8 @@ namespace HomeWork_5
         }
         public override string ToString()
         {
-            if(number_of_remaining_tickets == 0 || number_of_remaining_tickets < 0)
-            {
-                return $"Пункт назначения: {destination}, Номер рейса: {flight_number}, Кол-во билетов: {number_of_tickets}, Кол-во оставшихся мест: мест нет.";
-            }
+            if(number_of_remaining_tickets == 0 || number_of_remaining_tickets < 0)            
+                return $"Пункт назначения: {destination}, Номер рейса: {flight_number}, Кол-во билетов: {number_of_tickets}, Кол-во оставшихся мест: МЕСТ НЕТ.";
             else
                 return $"Пункт назначения: {destination}, Номер рейса: {flight_number}, Кол-во билетов: {number_of_tickets}, Кол-во оставшихся мест: {number_of_remaining_tickets}.";
         }
@@ -65,18 +63,10 @@ namespace HomeWork_5
         {
             new Aeroflot { destination = "Москва", flight_number = 44,  number_of_tickets = 400, number_of_remaining_tickets = 50},
             new Aeroflot { destination = "Санкт-Петербург", flight_number = 34,  number_of_tickets = 200, number_of_remaining_tickets = 180},
-            new Aeroflot { destination = "Екатеринбург", flight_number = 16,  number_of_tickets = 500, number_of_remaining_tickets = 410}
+            new Aeroflot { destination = "Екатеринбург", flight_number = 145,  number_of_tickets = 500, number_of_remaining_tickets = 410},
+            new Aeroflot { destination = "Магадан", flight_number = 6,  number_of_tickets = 350, number_of_remaining_tickets = 200},
+            new Aeroflot { destination = "Нижний-Новгород", flight_number = 16,  number_of_tickets = 100, number_of_remaining_tickets = 40}
         };
-        public void firstAeroFlotList()
-        {
-            lbAeroFlots.Items.Clear();
-            foreach (var aeroflot in aeroflots)
-            {
-                cbDestination.Items.Add(aeroflot.destination);
-                cbFlightNumber.Items.Add(aeroflot.flight_number);
-                lbAeroFlots.Items.Add(aeroflot);
-            }
-        }
         public void updateAeroFlotList()
         {
             lbAeroFlots.Items.Clear();
@@ -88,7 +78,7 @@ namespace HomeWork_5
         public MainWindow()
         {
             InitializeComponent();
-            firstAeroFlotList();
+            updateAeroFlotList();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -107,8 +97,6 @@ namespace HomeWork_5
                         number_of_tickets = int.Parse(tbNumberOfTickets.Text),
                         number_of_remaining_tickets = int.Parse(tbNumberOfTickets.Text) - rnd
                     };
-                    cbDestination.Items.Add(aeroflot.destination);
-                    cbFlightNumber.Items.Add(aeroflot.flight_number);
                     aeroflots.Add(aeroflot);
                     updateAeroFlotList();
                 }
@@ -129,10 +117,9 @@ namespace HomeWork_5
         {
             try
             {
-                int number = int.Parse(cbFlightNumber.Text);
                 foreach (var aeroflot in aeroflots)
                 {
-                    if (cbDestination.Text == aeroflot.destination && number == aeroflot.flight_number)
+                    if (tbFlightNumber1.Text == aeroflot.flight_number.ToString())
                     {
                         aeroflot.number_of_remaining_tickets -= 1;
                     }
@@ -142,6 +129,15 @@ namespace HomeWork_5
             catch
             {
                 MessageBox.Show("Проверьте введенные значения", "Ошибка данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void lbAeroFlots_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Aeroflot aeroflot = lbAeroFlots.SelectedItem as Aeroflot;
+            if (aeroflot != null)
+            {
+                tbFlightNumber1.Text = aeroflot.flight_number.ToString();
             }
         }
     }
